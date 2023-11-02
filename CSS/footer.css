@@ -1,0 +1,11 @@
+footer{
+    margin-top: auto;
+    margin-bottom: auto;
+    color: white;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    overflow: hidden;
+}

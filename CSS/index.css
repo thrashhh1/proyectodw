@@ -1,0 +1,37 @@
+html{
+    height: 100%;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+.card {
+    border-style: solid;
+    border-width: 2px;
+    border-image: linear-gradient(90deg, yellow, transparent);
+    border-image-slice: 1;
+    animation: borderAnimation 4s linear infinite;
+    animation-direction: alternate;
+}
+.row{
+    padding-top: 100px;
+}
+#texto{
+    color: white;
+}
+#titulo{
+    color: white;
+    margin: auto;
+    padding-right: 100px;
+}
+#texto2{
+    color: white;
+    font-style: italic;
+    font-size: small;
+}
+
+
+
+
+

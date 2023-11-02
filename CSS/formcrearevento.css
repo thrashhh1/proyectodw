@@ -1,0 +1,43 @@
+html{
+  height: 100%;
+}
+body{
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+table{
+    margin:auto;
+    padding-bottom: 100px;
+}
+th, td{
+    border: 1px solid rgb(255, 255, 255);
+    padding: 12px;
+    color: white;
+}
+#miH1{
+    color: white; 
+    margin: auto;
+    text-align: center;
+    padding-top: 185px;
+    padding-bottom: 30px;
+    animation: move 1s infinite;
+}
+#miH2{
+    color: white; 
+    margin: auto;
+    text-align: center;
+    padding-top: 180px;
+    padding-bottom: 30px;
+}
+#crearevento{
+    margin: auto;
+    padding-top: 30px;
+    padding-bottom: 50px;
+}
+footer{
+    margin-top: auto;
+}
+.form-label {
+  color: white;
+}

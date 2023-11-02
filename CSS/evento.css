@@ -1,0 +1,45 @@
+html{
+    height: 100%;
+  }
+  body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  table{
+    top: -100px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td{
+      border: 1px solid rgb(255, 255, 255);
+      padding: 12px;
+      color: white;
+  }
+  th {
+    text-align: left;
+  }
+  
+  td {
+    text-align: center;
+  }
+  
+  
+  #miH2{
+      color: white; 
+      margin: auto;
+      text-align: center;
+      padding-top: 70px;
+      padding-bottom: 30px;
+  }
+
+  footer{
+      margin-top: auto;
+  }
+  .form-label {
+    color: white;
+  }
+  .ver-evento {
+    text-decoration: none;
+    color: white;
+  }
