@@ -16,16 +16,16 @@
 		<div class="row" style="padding-top: 100px;">
 			<div class="col"></div> <!-- Ponemos un col al inicio y final para que el formulario quede centrado -->
 			<div class="col">
-				<div><h4>Registrar un administrador</h4></div>
+				<div><h4>Registrar un administrador</h4></div> 
 				<!-- Formulario de registro -->
 				<form action="/users/signup" method="POST"> <!-- Modificado el atributo action y el método a POST -->
 				<div class="mb-2">
 					<label for="email" class="form-label">E-mail</label>
-					<input type="email" class="form-control" name="email" required> <!-- Agregado el atributo 'required' -->
+					<input type="email" class="form-control" name="email" required value="{{email}}"> <!-- Agregado el atributo 'required' -->
 				</div>
 				<div class="mb-2">
 					<label for="password" class="form-label">Contraseña</label>
-					<input type="password" class="form-control" name="password" required> <!-- Agregado el atributo 'required' -->
+					<input type="password" class="form-control" name="password" required value="{{password}}"> <!-- Agregado el atributo 'required' -->
 				</div>
 				<div class="d-grid gap-2">
 					<button type="submit" class="btn btn-primary">Registrarse</button> <!-- Cambiado de <a> a <button> y atributos -->

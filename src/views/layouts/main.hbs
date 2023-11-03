@@ -12,9 +12,16 @@
     <link rel="stylesheet" href="/src/public/CSS/navbar.css">
 </head>
 <body>
+
+
     {{>navbar}}
 
-    {{{body}}}
+    <main class="container p-5">
+        {{>messages}}
+        {{>errors}}
+        {{{body}}}
+    </main>
+
 
     {{>footer}}
 
