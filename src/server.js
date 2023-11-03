@@ -24,6 +24,7 @@ app.use(express.urlencoded({extended: false}));
 
 // Routes
 app.use(require('./routes/index.routes'));
+app.use(require('./routes/admin.routes'));
 
 //Static Files
 app.use(express.static(path.join(__dirname, 'public')));
