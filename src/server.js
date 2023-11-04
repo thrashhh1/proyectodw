@@ -35,9 +35,12 @@ app.use((req, res, next) => {
     next();
 })
 
+
+//Routes
 app.use(require('./routes/index.routes'));
 app.use(require('./routes/admin.routes'));
 
+//Static files
 app.use(express.static(path.join(__dirname, 'public')));
 
 module.exports = app;

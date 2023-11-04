@@ -12,4 +12,8 @@ indexCtrl.renderIndex = (req, res) =>{
    res.render('users/acceder');
 };
 
+indexCtrl.renderEvent= (req, res) =>{
+   res.render('event');
+};
+
  module.exports = indexCtrl;
