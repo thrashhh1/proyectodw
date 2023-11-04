@@ -5,6 +5,10 @@ adminCtrl.renderSignUpForm = (req, res) => {
     res.render('users/signup');
 };
 
+adminCtrl.renderSigninForm = (req, res) =>{
+    res.render('users/signin');
+ };
+
 adminCtrl.signup = async (req, res) => {
     const errors = [];
     const { email, password } = req.body;
