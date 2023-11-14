@@ -1,19 +1,19 @@
 const indexCtrl = {};
 
-indexCtrl.renderIndex = (req, res) =>{
-    res.render('index');
- };
-
- indexCtrl.renderAcceder = (req, res) =>{
-    res.render('users/acceder');
- };
-
- indexCtrl.renderAccederAdmin = (req, res) =>{
-   res.render('users/acceder');
+indexCtrl.renderIndex = (req, res) => {
+   res.render('index', {
+      title: 'Vota ya!',
+      style: 'index.css'
+   });
 };
 
-indexCtrl.renderEvent= (req, res) =>{
+indexCtrl.renderAccess = (req, res) => {
+   const style = 'access.css';
+   res.render('users/access', { style });
+};
+
+indexCtrl.renderEvent = (req, res) => {
    res.render('event');
 };
 
- module.exports = indexCtrl;
+module.exports = indexCtrl;

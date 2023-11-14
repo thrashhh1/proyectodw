@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row" style="padding-top: 100px;">
+        <div class="col"></div>
+        <div class="col">
+            <div>
+                <h4>Ingresar como administrador</h4>
+            </div>
+            <form action="/users/admin/signin" method="POST">
+                <div class="mb-2">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" class="form-control" name="email" required value="{{email}}" />
+                </div>
+                <div class="mb-2">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" name="password" required value="{{password}}" />
+                </div>
+                <div class="mb-2 form-check">
+                    <input type="checkbox" name="connected" class="form-check-input" />
+                    <label for="connected" class="form-check-label">Mantenerme conectado</label>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                </div>
+                <div class="text-center">
+                    <p>No tienes cuenta?
+                        <a href="/users/admin/signup">Registrate</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>

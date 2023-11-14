@@ -2,13 +2,17 @@ html{
   height: 100%;
 }
 body{
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
+  background: url('../img/564835.jpg') rgba(0,0,0,0.8);
+  background-size:100% 100%;
+  background-attachment: fixed;
+  background-blend-mode: multiply;
+  background-position: center;
+  background-size: cover;
+  background-repeat: space;
 }
 table{
     margin:auto;
-    padding-bottom: 100px;
+    padding-top: 100px;
 }
 th, td{
     border: 1px solid rgb(255, 255, 255);
@@ -19,15 +23,14 @@ th, td{
     color: white; 
     margin: auto;
     text-align: center;
-    padding-top: 185px;
+    padding-top: 10px;
     padding-bottom: 30px;
-    animation: move 1s infinite;
 }
 #miH2{
     color: white; 
     margin: auto;
     text-align: center;
-    padding-top: 180px;
+    padding-top: 10px;
     padding-bottom: 30px;
 }
 #crearevento{

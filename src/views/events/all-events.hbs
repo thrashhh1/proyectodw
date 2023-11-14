@@ -1,0 +1,20 @@
+<table>
+  <thead>
+    <tr>
+      <th>Nombre del Evento</th>
+      <th>Fecha</th>
+      <th>Fecha de finalización</th>
+      <th>Ver evento</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each events}}
+      <tr>
+        <td>{{title}}</td>
+        <td>{{date}}</td>
+        <td>{{datef}}</td>
+        <td> <a href="/events/event/{{_id}}"> Ver Evento</a></td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="CSS/add.css" />
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h1 id="miH1">Añade a un concursante</h1>
+       <form action="/events/new-participant" method="POST">
+    <div class="mb-2">
+        <label for="name" class="form-label">Nombre del participante</label>
+        <input type="text" class="form-control" name="name" required />
+    </div>
+    <div class="mb-2">
+        <label for="imageUrl" class="form-label">URL de la imagen</label>
+        <input type="text" class="form-control" name="imageUrl" required />
+    </div>
+    <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Añadir a la base de datos</button>
+    </div>
+</form>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-2">
+        <h1 id="miH2">Tabla de participantes</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Participante</th>
+              <th>Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each participants}}
+            <tr>
+              <td>{{name}}</td>
+              <td>
+                <form action="/events/participant/delete/{{_id}}?_method=DELETE" method="POST">
+                  <input type="hidden" name="_method" value="DELETE" />
+                  <button type="submit" class="btn btn-danger btn-block">Delete</button>
+                </form>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+

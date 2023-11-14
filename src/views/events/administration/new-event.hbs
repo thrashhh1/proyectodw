@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="CSS/add.css" />
+
+
+
+<form action="/events/new-event" method="POST">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h1 id="miH1">Crea tu evento aqui!</h1>
+        <div class="form-group">
+
+          <label for="title" class="form-label">Nombre del evento</label>
+          <input type="text" class="form-control" name="title" />
+
+        </div>
+        <div class="form-group">
+
+          <label for="date" class="form-label">Fecha de Inicio</label>
+          <input type="date" class="form-control" name="date" />
+
+        </div>
+        <div class="form-group">
+
+          <label for="datef" class="form-label">Fecha de finalización</label>
+          <input type="date" class="form-control" name="datef" />
+
+        </div>
+        <div id="crearevento" class="d-grid">
+          <button type="submit" class="btn btn-danger">Crear evento</button>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-2">
+          <h1 id="miH2">Tabla de participantes</h1>
+          <table>
+            <!-- Posteriormente se autorrellenara con js, mientras tanto se hace manualmente-->
+            <thead>
+              <tr>
+                <th>Añadir</th>
+                <th>Participante</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each participants}}
+              <tr>
+                <td><input type="checkbox" name="participants" value="{{_id}}" /></td>
+                <td>{{name}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

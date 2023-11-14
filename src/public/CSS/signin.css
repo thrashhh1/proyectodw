@@ -1,0 +1,23 @@
+body{
+    background: url('../img/564835.jpg') rgba(0,0,0,0.8);
+    background-size:100% 100%;
+    background-attachment: fixed;
+    background-blend-mode: multiply;
+    background-position: center;
+    background-size: cover;
+    background-repeat: space;
+}
+h4{
+    color: white;
+}
+.form-check-label {
+    color: white;
+}
+/* Estilo para el fondo blanco en el formulario y el contenedor de texto */
+form, .text-center {
+    color: white; 
+}
+/* Estilo para el fondo blanco en el checkbox */
+.form-check-input {
+    background-color: white; 
+}

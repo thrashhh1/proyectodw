@@ -1,0 +1,46 @@
+html{
+    height: 100%;
+  }
+  body{
+    background: url('../img/564835.jpg') rgba(0,0,0,0.8);
+    background-size:100% 100%;
+    background-attachment: fixed;
+    background-blend-mode: multiply;
+    background-position: center;
+    background-size: cover;
+    background-repeat: space;
+  }
+  table{
+      margin:auto;
+      padding-top: 100px;
+  }
+  th, td{
+      border: 1px solid rgb(255, 255, 255);
+      padding: 12px;
+      color: white;
+  }
+  #miH1{
+      color: white; 
+      margin: auto;
+      text-align: center;
+      padding-top: 10px;
+      padding-bottom: 30px;
+  }
+  #miH2{
+      color: white; 
+      margin: auto;
+      text-align: center;
+      padding-top: 10px;
+      padding-bottom: 30px;
+  }
+  #crearevento{
+      margin: auto;
+      padding-top: 30px;
+      padding-bottom: 50px;
+  }
+  footer{
+      margin-top: auto;
+  }
+  .form-label {
+    color: white;
+  }

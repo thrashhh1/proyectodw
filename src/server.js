@@ -5,11 +5,24 @@ const morgan = require('morgan');
 const methodOverride = require('method-override');
 const flash = require('connect-flash');
 const session = require('express-session');
+const passport = require('passport');
 
+
+
+//Initializations
 const app = express();
+require('./config/passport');
 
+
+
+//Settings
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
+
+// Agregar la ruta views/users/admin
+app.set('adminViews', path.join(app.get('views'), 'users', 'admin'));
+app.set('usersViews', path.join(app.get('views'), 'users'));
+
 app.engine('.hbs', exphbs.engine({
     defaultLayout: 'main',
     layoutsDir: path.join(app.get('views'), 'layouts'),
@@ -19,6 +32,7 @@ app.engine('.hbs', exphbs.engine({
 
 app.set('view engine', '.hbs');
 
+//Middlewares
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
@@ -27,18 +41,24 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 
+//Global Variables
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    res.locals.user = req.user || null;
     next();
-})
+});
 
 
 //Routes
 app.use(require('./routes/index.routes'));
 app.use(require('./routes/admin.routes'));
+app.use(require('./routes/events.routes'));
 
 //Static files
 app.use(express.static(path.join(__dirname, 'public')));
