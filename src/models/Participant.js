@@ -1,17 +1,24 @@
 const { Schema, model } = require('mongoose');
+const Event = require('./Event');
 
 const participantSchema = new Schema({
     name: {
         type: String,
         required: true
     },
-    votes: {
-        type: Number,
-        default: 0
-    },
     imageUrl: {
         type: String 
-    }
+    },
+    events: [{
+        event: {
+            type: Schema.Types.ObjectId,
+            ref: 'Event'
+        },
+        votes: {
+            type: Number,
+            default: 0
+        }
+    }]
 }, {
     timestamps: true
 });

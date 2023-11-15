@@ -12,7 +12,8 @@ const {
      renderAdminParticipant,
      AddParticipant,
      deleteParticipant,
-     renderEventid
+     renderEventid,
+     addVotetoParticipant
 } = require("../controllers/events.controller");
 
 const { isAuthenticated } = require("../helpers/auth");
@@ -43,5 +44,8 @@ router.post("/events/new-participant",isAuthenticated, AddParticipant);
 
 //Eliminar participantes
 router.delete("/events/participant/delete/:id",isAuthenticated ,deleteParticipant);
+
+//Dar voto a participante
+router.post("/events/participant/addVote/", addVotetoParticipant);
 
 module.exports = router;

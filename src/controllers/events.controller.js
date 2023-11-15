@@ -2,9 +2,7 @@ const eventsCtrl = {};
 const multer = require('multer');
 const Event = require('../models/Event');
 const Participant = require('../models/Participant');
-
-const storage = multer.memoryStorage(); // Almacenar la imagen en memoria
-
+const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
     limits: {
@@ -19,6 +17,8 @@ const upload = multer({
         }
     },
 });
+
+
 
 // Funciones para eventos
 eventsCtrl.renderEventsForm = async (req, res) => {
@@ -111,11 +111,59 @@ eventsCtrl.renderEventid = async (req, res) => {
             return res.status(404).send('Evento no encontrado');
         }
 
-        res.render('events/event', { event, style: 'signin.css' });
+        const participants = event.participants;
+        const participantsChunks = [];
+
+        const chunkSize = 3; // Cambia según la cantidad de participantes que desees en cada carrusel
+
+        for (let i = 0; i < participants.length; i += chunkSize) {
+            participantsChunks.push(participants.slice(i, i + chunkSize));
+        }
+
+        res.render('events/event', { event, style: 'signin.css', participantsChunks });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al obtener los detalles del evento');
     }
+
 };
+
+//Funcion para los votos
+eventsCtrl.addVotetoParticipant = async (req, res) => {
+    try {
+        const { participantId, eventId } = req.body;
+
+        // Supongamos que recibes el número de votos desde la solicitud
+        const votesToAdd = 1;
+
+        // Busca el participante y el evento
+        const participant = await Participant.findById(participantId);
+        const event = await Event.findById(eventId);
+
+        // Verifica si el participante y el evento existen
+        if (!participant || !event) {
+            return res.status(404).json({ error: 'Participante o evento no encontrado' });
+        }
+
+        // Verifica si el participante ya está asociado al evento
+        const existingEvent = participant.events.find((ev) => ev.event.equals(eventId));
+        if (!existingEvent) {
+            return res.status(400).json({ error: 'El participante no está asociado a este evento' });
+        }
+
+        // Actualiza los votos en el contexto del evento
+        existingEvent.votes += votesToAdd;
+
+        // Guarda los cambios en el participante
+        await participant.save();
+
+        res.status(200).json({ message: 'Voto agregado exitosamente' });
+    } catch (error) {
+        console.error('Error al agregar voto:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
+
 
 module.exports = eventsCtrl;
