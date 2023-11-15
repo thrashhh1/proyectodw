@@ -63,9 +63,15 @@ adminCtrl.signin = passport.authenticate('local', {
 });
 
 adminCtrl.logout = (req, res) => {
-    req.logout();
-    req.flash('succes_msg', 'Has cerrado sesión');
-    res.redirect('/users/admin/signin');
+    req.logout((err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Error al cerrar sesión");
+        } else {
+            req.flash('success_msg', 'Has cerrado sesión');
+            res.redirect('/users/admin/signin');
+        }
+    });
 };
 
 module.exports = adminCtrl;

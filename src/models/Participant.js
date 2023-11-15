@@ -10,9 +10,8 @@ const participantSchema = new Schema({
         default: 0
     },
     imageUrl: {
-        type: String, 
-        required: true
-    },
+        type: String 
+    }
 }, {
     timestamps: true
 });

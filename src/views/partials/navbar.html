@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg bg-black" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Torneo de cell</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/events">Eventos</a>
+        </li>
+
+        <!-- Si el usuario está autenticado -->
+        {{#if user}}
+        <li class="nav-item">
+            <a class="nav-link" href="/users/admin/adminindex">Administración</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/logout">Cerrar sesión</a>
+          </li>
+          <!-- Agrega aquí otros elementos específicos del administrador si es necesario -->
+        {{else}}
+          <!-- Si el usuario no está autenticado -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Acceder
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/users/admin/signin">Iniciar sesión</a></li>
+              <li><a class="dropdown-item" href="/users/admin/signup">Registrarse</a></li>
+            </ul>
+          </li>
+        {{/if}}
+      </ul>
+    </div>
+  </div>
+</nav>
