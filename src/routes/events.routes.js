@@ -21,14 +21,14 @@ const Participant = require("../models/Participant");
 
 
 // Ver evento
-router.get("/events/event/:id", renderEventid);
+router.get("/eventos/:id/", renderEventid);
 
 // Nuevo evento
-router.get("/events/add", isAuthenticated, renderEventsForm); //esta ruta envia al archivo new-event.hbs
-router.post("/events/new-event", isAuthenticated, createNewEvent);
+router.get("/events/crear", isAuthenticated, renderEventsForm); //esta ruta envia al archivo new-event.hbs
+router.post("/eventos/crear", isAuthenticated, createNewEvent);
 
 //Obtener todos los eventos
-router.get("/events", renderEvents);
+router.get("/eventos", renderEvents);
 router.get("/events/administration", isAuthenticated, renderAdminevents);
 
 // Editar eventos

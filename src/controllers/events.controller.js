@@ -25,7 +25,8 @@ eventsCtrl.renderEventsForm = async (req, res) => {
     const participants = await Participant.find().lean();
     res.render('events/administration/new-event', {
         title: 'Eventos',
-        style: 'add.css', participants
+        style: 'add.css', 
+        participants
     });
 };
 

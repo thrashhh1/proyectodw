@@ -11,7 +11,7 @@
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/events">Eventos</a>
+          <a class="nav-link" href="/eventos">Eventos</a>
         </li>
 
         <!-- Si el usuario está autenticado -->
@@ -20,7 +20,7 @@
             <a class="nav-link" href="/users/admin/adminindex">Administración</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/logout">Cerrar sesión</a>
+            <a class="nav-link" href="/usuarios/salir">Cerrar sesión</a>
           </li>
           <!-- Agrega aquí otros elementos específicos del administrador si es necesario -->
         {{else}}
@@ -30,8 +30,8 @@
               Acceder
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/users/admin/signin">Iniciar sesión</a></li>
-              <li><a class="dropdown-item" href="/users/admin/signup">Registrarse</a></li>
+              <li><a class="dropdown-item" href="/usuarios/ingresar">Iniciar sesión</a></li>
+              <li><a class="dropdown-item" href="/usuarios/crear">Registrarse</a></li>
             </ul>
           </li>
         {{/if}}
