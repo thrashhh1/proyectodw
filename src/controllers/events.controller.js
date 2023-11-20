@@ -88,11 +88,11 @@ eventsCtrl.AddParticipant = async (req, res) => {
             await newParticipant.save();
             console.log(newParticipant);
             req.flash('success_msg', 'Participante añadido correctamente');
-            res.redirect('/events/admin-participant');
+            res.redirect('/events/administration');
         } catch (error) {
             console.error('Error al guardar el participante:', error);
             req.flash('error_msg', 'Error al guardar el participante.');
-            res.redirect('/events/admin-participant');
+            res.redirect('/events/administration');
         }
     });
 };
@@ -185,13 +185,14 @@ eventsCtrl.updateEventStatus = async (req, res) => {
 
         await event.save();
 
-        return res.status(200).json({ success: true, message: 'Estado del evento actualizado correctamente' });
+        req.flash("success_msg", "El evento se actualizo correctamente de estado!");
+        res.redirect('/events/administration'); 
     } catch (error) {
         console.error('Error al actualizar el estado del evento:', error);
-        return res.status(500).json({ success: false, message: 'Error al actualizar el estado del evento' });
+        req.flash("error_msg", "Hubo un error al actualizar el evento");
+        res.redirect('/events/administration'); 
     }
 };
-
 
 
 module.exports = eventsCtrl;

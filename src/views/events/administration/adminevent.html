@@ -16,7 +16,7 @@
       <td>{{datef}}</td>
       <td> <a href="/eventos/{{_id}}"> Ver Evento</a></td>
       <td>
-        <form id="updateEventForm_{{_id}}" action="/events/updateStatus/{{_id}}" method="POST">
+        <form id="updateEventForm_{{_id}}" action="/events/actualizarEstado/{{_id}}" method="POST">
           <input type="hidden" name="_method" value="POST">
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
           {{#if isActive}}

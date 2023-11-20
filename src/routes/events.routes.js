@@ -49,6 +49,6 @@ router.delete("/events/participant/delete/:id",isAuthenticated ,deleteParticipan
 //Dar voto a participante
 router.post("/events/participant/addVote/", addVotetoParticipant);
 
-router.post("/events/updateStatus/:id", updateEventStatus);
+router.post("/events/actualizarEstado/:id", updateEventStatus);
 
 module.exports = router;
