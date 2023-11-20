@@ -165,6 +165,33 @@ eventsCtrl.addVotetoParticipant = async (req, res) => {
     }
 };
 
+eventsCtrl.updateEventStatus = async (req, res) => {
+    try {
+        const eventId = req.params.id;
+
+        // Verifica si hay un usuario autenticado
+        if (!req.user) {
+            return res.status(401).json({ success: false, message: 'Usuario no autenticado' });
+        }
+
+        const event = await Event.findById(eventId);
+
+        if (!event) {
+            return res.status(404).json({ success: false, message: 'Evento no encontrado' });
+        }
+
+        // Actualiza el estado del evento
+        event.isActive = !event.isActive; // Cambia entre activo e inactivo
+
+        await event.save();
+
+        return res.status(200).json({ success: true, message: 'Estado del evento actualizado correctamente' });
+    } catch (error) {
+        console.error('Error al actualizar el estado del evento:', error);
+        return res.status(500).json({ success: false, message: 'Error al actualizar el estado del evento' });
+    }
+};
+
 
 
 module.exports = eventsCtrl;

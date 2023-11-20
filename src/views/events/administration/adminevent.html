@@ -10,18 +10,29 @@
   </thead>
   <tbody>
     {{#each events}}
-      <tr>
-        <td>{{title}}</td>
-        <td>{{date}}</td>
-        <td>{{datef}}</td>
-        <td> <a href="/eventos/{{_id}}"> Ver Evento</a></td>
-        <td><form action="/events/delete/{{_id}}?_method=DELETE" method="POST">
-        <input type="hidden" name="_method" value="DELETE">
-        <button
+    <tr>
+      <td>{{title}}</td>
+      <td>{{date}}</td>
+      <td>{{datef}}</td>
+      <td> <a href="/eventos/{{_id}}"> Ver Evento</a></td>
+      <td>
+        <form id="updateEventForm_{{_id}}" action="/events/updateStatus/{{_id}}" method="POST">
+          <input type="hidden" name="_method" value="POST">
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          {{#if isActive}}
+            <button
               type="submit"
-              class="btn btn-danger btn-block"
-            >Delete</button></form></td>
-      </tr>
+              class="btn btn-primary btn-block"
+            >Cerrar</button>
+          {{else}}
+            <button
+              type="submit"
+              class="btn btn-primary btn-block"
+            >Abrir</button>
+          {{/if}}
+        </form>
+      </td>
+    </tr>
     {{/each}}
   </tbody>
 </table>

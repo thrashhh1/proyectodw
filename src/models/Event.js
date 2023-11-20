@@ -14,13 +14,16 @@ const eventSchema = new Schema({
         type: Date,
         required: true
     },
-    participants:[{
+    participants: [{
         type: Schema.Types.ObjectId,
         ref: 'Participant'
-    }]
+    }],
+    isActive: {
+        type: Boolean,
+        default: true // Puedes establecer el valor predeterminado según sea necesario
+    }
 }, {
     timestamps: true
-
 });
 
 module.exports = model('Event', eventSchema);

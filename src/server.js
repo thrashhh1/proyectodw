@@ -1,5 +1,6 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
+const hbs = require('handlebars');
 const path = require('path');
 const morgan = require('morgan'); 
 const methodOverride = require('method-override');
@@ -27,6 +28,10 @@ app.engine('.html', exphbs.engine({
 }));
 
 app.set('view engine', '.html');
+
+hbs.registerHelper('isActive', function (isActive) {
+    return isActive ? 'Cerrar' : 'Abrir';
+});
 
 // Middlewares
 app.use(morgan('dev'));
