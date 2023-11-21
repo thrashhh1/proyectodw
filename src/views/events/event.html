@@ -6,54 +6,66 @@
             <div>
                 <h4>Vota por tu participante!</h4>
             </div>
-            <form action="#">
-                <div class="mb-2">
-                    <div id="carouselExampleCaptions" class="carousel slide">
-                        <div class="carousel-indicators">
-                            {{#each event.participants}}
-                                <button type="button" data-bs-target="#carouselExampleCaptions" 
-                                        data-bs-slide-to="{{@index}}" {{#if @first}}class="active" aria-current="true"{{/if}} 
-                                        aria-label="Slide {{@index}}"></button>
-                            {{/each}}
-                        </div>
-                        <div class="carousel-inner">
-                            {{#each event.participants}}
-                                <div class="carousel-item {{#if @first}}active{{/if}}">
-                                    <img src="{{this.imageUrl}}" class="d-block w-100" alt="...">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>{{this.name}}</h5>
-                                        <div class="mb-4 form-check" style="padding-top: 100;">
-                                            <input type="checkbox" name="connected" class="form-check-input">
-                                            <label for="connected" class="form-check-label">Seleccionar participante</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            {{/each}}
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-                                data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-                                data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
+            <div class="mb-2">
+                <div id="carouselExampleCaptions" class="carousel slide">
+                    <div class="carousel-indicators">
+                        {{#each event.participants}}
+                            <button type="button" data-bs-target="#carouselExampleCaptions"
+                                data-bs-slide-to="{{@index}}" {{#if @first}}class="active" aria-current="true" {{/if}}
+                                aria-label="Slide {{@index}}"></button>
+                        {{/each}}
                     </div>
+                    <div class="carousel-inner">
+                        {{#each event.participants}}
+                            <div class="carousel-item {{#if @first}}active{{/if}}">
+                                <img src="{{this.imageUrl}}" class="d-block w-100" alt="...">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>{{this.name}}</h5>
+                                    <div class="mb-4 form-check" style="padding-top: 100;">
+                                        <input type="checkbox" name="connected" class="form-check-input">
+                                        <input type="hidden" name="participantId" value="{{this._id}}">
+                                        <input type="hidden" name="eventId" value="{{../event._id}}">
+                                        <label for="connected" class="form-check-label">Seleccionar participante</label>       
+                                    </div>
+                                    <form id="addVotetoParticipant_{{this._id}}"  action="/events/participant/addVote/{{this._id}}" method="POST">
+                                        <input type="hidden" name="participantId" value="{{this._id}}">
+                                        <input type="hidden" name="eventId" value="{{../event._id}}">
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary">VOTAR</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">VOTAR</button>
-                </div>
-            </form>
+            </div>
         </div>
         <div class="col"></div>
     </div>
 </div>
 {{else}}
 <div class="alert alert-primary  alert-dismissible fade show" role="alert">
-    El evento a finalizado, el ganador se vera dentro de poco!
+    El evento ha finalizado. ¡El ganador se verá dentro de poco!
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-
+</div>
 {{/if}}
+
+<script>
+    $('form[id^="addVotetoParticipant_"]').on('submit', function(event) {
+        event.preventDefault();
+        const eventId = window.location.pathname.split('/').pop(); 
+        $(this).append(`<input type="hidden" name="eventId" value="${eventId}">`);
+        $(this).submit();
+    });
+</script>

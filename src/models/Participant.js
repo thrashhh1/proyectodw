@@ -9,8 +9,8 @@ const participantSchema = new Schema({
     imageUrl: {
         type: String 
     },
-    events: [{
-        event: {
+    votesForEvents: [{
+        eventId: {
             type: Schema.Types.ObjectId,
             ref: 'Event'
         },
@@ -18,7 +18,7 @@ const participantSchema = new Schema({
             type: Number,
             default: 0
         }
-    }]
+    }],
 }, {
     timestamps: true
 });

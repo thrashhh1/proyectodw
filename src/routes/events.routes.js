@@ -47,7 +47,7 @@ router.post("/events/new-participant",isAuthenticated, AddParticipant);
 router.delete("/events/participant/delete/:id",isAuthenticated ,deleteParticipant);
 
 //Dar voto a participante
-router.post("/events/participant/addVote/", addVotetoParticipant);
+router.post("/events/participant/addVote/:id", addVotetoParticipant);
 
 router.post("/events/actualizarEstado/:id", updateEventStatus);
 

@@ -15,12 +15,12 @@ const eventSchema = new Schema({
         required: true
     },
     participants: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Participant'
+            type: Schema.Types.ObjectId,
+            ref: 'Participant'
     }],
     isActive: {
         type: Boolean,
-        default: true // Puedes establecer el valor predeterminado según sea necesario
+        default: true
     }
 }, {
     timestamps: true

@@ -6,6 +6,7 @@
       <th>Fecha de finalización</th>
       <th>Ver evento</th>
       <th>Finalizar</th>
+      <th>Eliminar</th>
     </tr>
   </thead>
   <tbody>
@@ -32,6 +33,12 @@
           {{/if}}
         </form>
       </td>
+      <td><form action="/events/delete/{{_id}}?_method=DELETE" method="POST">
+        <input type="hidden" name="_method" value="DELETE">
+        <button
+              type="submit"
+              class="btn btn-danger btn-block"
+            >Delete</button></form></td>
     </tr>
     {{/each}}
   </tbody>

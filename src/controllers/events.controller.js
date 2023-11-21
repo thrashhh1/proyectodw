@@ -25,17 +25,34 @@ eventsCtrl.renderEventsForm = async (req, res) => {
     const participants = await Participant.find().lean();
     res.render('events/administration/new-event', {
         title: 'Eventos',
-        style: 'add.css', 
+        style: 'add.css',
         participants
     });
 };
 
 eventsCtrl.createNewEvent = async (req, res) => {
     const { title, date, datef, participants } = req.body;
-    const newEvent = new Event({ title, date, datef, participants });
-    await newEvent.save();
-    console.log(newEvent);
-    res.redirect('/events/administration');
+
+    try {
+        // Crea el nuevo evento
+        const newEvent = await Event.create({ title, date, datef, participants });
+
+        const participantsToUpdate = await Participant.find({ _id: { $in: participants } });
+
+        for (const participant of participantsToUpdate) {
+            // Crea un nuevo voto para este evento en el participante
+            participant.votesForEvents.push({ eventId: newEvent._id, votes: 0 });
+            await participant.save();
+            console.log(participant);
+        }
+
+        console.log(newEvent);
+        res.redirect('/events/administration');
+    } catch (error) {
+        console.error('Error al crear el evento:', error);
+        req.flash('error_msg', 'Error al crear el evento.');
+        res.redirect('/events/administration');
+    }
 };
 
 eventsCtrl.renderEvents = async (req, res) => {
@@ -88,11 +105,11 @@ eventsCtrl.AddParticipant = async (req, res) => {
             await newParticipant.save();
             console.log(newParticipant);
             req.flash('success_msg', 'Participante añadido correctamente');
-            res.redirect('/events/administration');
+            res.redirect('/events/admin-participant');
         } catch (error) {
             console.error('Error al guardar el participante:', error);
             req.flash('error_msg', 'Error al guardar el participante.');
-            res.redirect('/events/administration');
+            res.redirect('/events/admin-participant');
         }
     });
 };
@@ -134,63 +151,60 @@ eventsCtrl.addVotetoParticipant = async (req, res) => {
     try {
         const { participantId, eventId } = req.body;
 
-        // Supongamos que recibes el número de votos desde la solicitud
-        const votesToAdd = 1;
+        console.log(eventId);
+        console.log(participantId);
 
-        // Busca el participante y el evento
+        if (!participantId || !eventId) {
+            return res.status(400).json({ error: 'IDs de participante o evento inválidos' });
+        }
+
         const participant = await Participant.findById(participantId);
         const event = await Event.findById(eventId);
 
-        // Verifica si el participante y el evento existen
         if (!participant || !event) {
             return res.status(404).json({ error: 'Participante o evento no encontrado' });
         }
 
-        // Verifica si el participante ya está asociado al evento
-        const existingEvent = participant.events.find((ev) => ev.event.equals(eventId));
-        if (!existingEvent) {
-            return res.status(400).json({ error: 'El participante no está asociado a este evento' });
+        if (!event.isActive) {
+            return res.status(403).json({ error: 'El evento ha finalizado. No se pueden agregar más votos.' });
         }
 
-        // Actualiza los votos en el contexto del evento
-        existingEvent.votes += votesToAdd;
+    
+        const isParticipantAssociated = participant.votesForEvents.some(vote => vote.eventId.equals(eventId));
+        if (!isParticipantAssociated) {
+            return res.status(403).json({ error: 'El participante no está asociado a este evento.' });
+        }
 
-        // Guarda los cambios en el participante
+       
+        const voteIndex = participant.votesForEvents.findIndex(vote => vote.eventId.equals(eventId));
+        participant.votesForEvents[voteIndex].votes += 1;
         await participant.save();
+        req.flash('success_msg', 'Has enviado tus votos correctamente!');
+        res.redirect('/');
 
-        res.status(200).json({ message: 'Voto agregado exitosamente' });
+
     } catch (error) {
-        console.error('Error al agregar voto:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+        req.flash('error_msg', 'Error al ejecutar el voto.');
+        res.redirect('/events/administration');
     }
 };
 
 eventsCtrl.updateEventStatus = async (req, res) => {
     try {
         const eventId = req.params.id;
-
-        // Verifica si hay un usuario autenticado
-        if (!req.user) {
-            return res.status(401).json({ success: false, message: 'Usuario no autenticado' });
-        }
-
         const event = await Event.findById(eventId);
 
-        if (!event) {
-            return res.status(404).json({ success: false, message: 'Evento no encontrado' });
-        }
-
-        // Actualiza el estado del evento
-        event.isActive = !event.isActive; // Cambia entre activo e inactivo
+        event.isActive = !event.isActive;
 
         await event.save();
 
         req.flash("success_msg", "El evento se actualizo correctamente de estado!");
-        res.redirect('/events/administration'); 
+        res.redirect('/events/administration');
+
     } catch (error) {
         console.error('Error al actualizar el estado del evento:', error);
         req.flash("error_msg", "Hubo un error al actualizar el evento");
-        res.redirect('/events/administration'); 
+        res.redirect('/events/administration');
     }
 };
 
