@@ -1,5 +1,5 @@
+//Event.js
 const { Schema, model } = require('mongoose');
-const Participant = require('./Participant');
 
 const eventSchema = new Schema({
     title: {
@@ -14,10 +14,6 @@ const eventSchema = new Schema({
         type: Date,
         required: true
     },
-    participants: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Participant'
-    }],
     isActive: {
         type: Boolean,
         default: true

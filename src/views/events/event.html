@@ -4,36 +4,38 @@
         <div class="col"></div>
         <div class="col">
             <div>
-                <h4>Vota por tu participante!</h4>
+                <h4 class="text-center">Vota por tu participante!</h4>
             </div>
             <div class="mb-2">
                 <div id="carouselExampleCaptions" class="carousel slide">
                     <div class="carousel-indicators">
-                        {{#each event.participants}}
-                            <button type="button" data-bs-target="#carouselExampleCaptions"
-                                data-bs-slide-to="{{@index}}" {{#if @first}}class="active" aria-current="true" {{/if}}
-                                aria-label="Slide {{@index}}"></button>
+                        {{#each participants}}
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{@index}}"
+                            {{#if @first}}class="active" aria-current="true" {{/if}}
+                            aria-label="Slide {{@index}}"></button>
                         {{/each}}
                     </div>
                     <div class="carousel-inner">
-                        {{#each event.participants}}
+                        {{#each participants}}
                             <div class="carousel-item {{#if @first}}active{{/if}}">
-                                <img src="{{this.imageUrl}}" class="d-block w-100" alt="...">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>{{this.name}}</h5>
-                                    <div class="mb-4 form-check" style="padding-top: 100;">
-                                        <input type="checkbox" name="connected" class="form-check-input">
-                                        <input type="hidden" name="participantId" value="{{this._id}}">
-                                        <input type="hidden" name="eventId" value="{{../event._id}}">
-                                        <label for="connected" class="form-check-label">Seleccionar participante</label>       
-                                    </div>
-                                    <form id="addVotetoParticipant_{{this._id}}"  action="/events/participant/addVote/{{this._id}}" method="POST">
-                                        <input type="hidden" name="participantId" value="{{this._id}}">
-                                        <input type="hidden" name="eventId" value="{{../event._id}}">
-                                        <div class="d-grid">
-                                            <button type="submit" class="btn btn-primary">VOTAR</button>
+                                <div class="card" style="width: 30rem; background-color: black;">
+                                    <img src="{{this.imageUrl}}" class="card-img-top" alt="..."
+                                        style="height: 300px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center" style="color: white;">{{this.name}}</h5>
+                                        <form id="addVotetoParticipant{{this._id}}"
+                                            action="/events/participant/addVote/{{this._id}}" method="POST">
+                                            <input type="hidden" name="participantId" value="{{this._id}}">
+                                            <input type="hidden" name="eventId" value="{{../event._id}}">
+                                            <div class="d-grid">
+                                                <button type="submit" class="btn btn-primary">VOTAR</button>
+                                            </div>
+                                        </form>
+                                        <div>
+                                            <h5 style="padding-top: 20px;"></h5>
                                         </div>
-                                    </form>
+                
+                                    </div>
                                 </div>
                             </div>
                         {{/each}}
@@ -62,9 +64,9 @@
 {{/if}}
 
 <script>
-    $('form[id^="addVotetoParticipant_"]').on('submit', function(event) {
+    $('form[id^="addVotetoParticipant_"]').on('submit', function (event) {
         event.preventDefault();
-        const eventId = window.location.pathname.split('/').pop(); 
+        const eventId = window.location.pathname.split('/').pop();
         $(this).append(`<input type="hidden" name="eventId" value="${eventId}">`);
         $(this).submit();
     });

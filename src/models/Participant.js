@@ -1,5 +1,5 @@
+//Participant.js
 const { Schema, model } = require('mongoose');
-const Event = require('./Event');
 
 const participantSchema = new Schema({
     name: {
@@ -8,17 +8,7 @@ const participantSchema = new Schema({
     },
     imageUrl: {
         type: String 
-    },
-    votesForEvents: [{
-        eventId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Event'
-        },
-        votes: {
-            type: Number,
-            default: 0
-        }
-    }],
+    }
 }, {
     timestamps: true
 });

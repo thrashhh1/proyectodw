@@ -1,7 +1,10 @@
+//events.controller.js
+
 const eventsCtrl = {};
 const multer = require('multer');
 const Event = require('../models/Event');
 const Participant = require('../models/Participant');
+const Eventparticipant = require('../models/Eventparticipant');
 const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
@@ -31,19 +34,22 @@ eventsCtrl.renderEventsForm = async (req, res) => {
 };
 
 eventsCtrl.createNewEvent = async (req, res) => {
+    //Crear evento nuevo
     const { title, date, datef, participants } = req.body;
-
     try {
-        // Crea el nuevo evento
-        const newEvent = await Event.create({ title, date, datef, participants });
+        const newEvent = await Event.create({ title, date, datef });
+        const eventId = newEvent._id;
 
         const participantsToUpdate = await Participant.find({ _id: { $in: participants } });
 
         for (const participant of participantsToUpdate) {
-            // Crea un nuevo voto para este evento en el participante
-            participant.votesForEvents.push({ eventId: newEvent._id, votes: 0 });
-            await participant.save();
-            console.log(participant);
+            const participantId = participant._id;
+            const newEventParticipant = await Eventparticipant.create({
+                id_event: eventId,
+                id_participant: participantId,
+                votes: 0
+            });
+            console.log(newEventParticipant);
         }
 
         console.log(newEvent);
@@ -71,17 +77,53 @@ eventsCtrl.renderEditForm = (req, res) => {
     res.send('Render EditForm');
 };
 
+eventsCtrl.renderEventid = async (req, res) => {
+    try {
+        const eventId = req.params.id;
+
+        const eventParticipants = await Eventparticipant.find({ id_event: eventId }).lean();
+        console.log(eventParticipants);
+
+        //Obtiene los IDs de los participantes para el evento específico
+        const participantIds = eventParticipants.map(participant => participant.id_participant);
+        console.log(participantIds);
+
+        //Busca los detalles de los participantes basados en los IDs obtenidos
+        const participants = await Participant.find({ _id: { $in: participantIds } }).lean();
+
+        //Obtén los detalles del evento
+        const event = await Event.findById(eventId).lean();
+
+        if (!event) {
+            return res.status(404).send('Evento no encontrado');
+        }
+
+        res.render('events/event', { event, participants, style: 'signin.css' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al obtener los detalles del evento');
+    }
+};
+
 eventsCtrl.updateEvent = (req, res) => {
     res.send('update event');
 };
 
 eventsCtrl.deleteEvent = async (req, res) => {
-    await Event.findByIdAndDelete(req.params.id);
-    res.redirect('/events/administration');
+    try {
+        const eventId = req.params.id;
+        await Event.findByIdAndDelete(eventId);
+        await Eventparticipant.deleteMany({ id_event: eventId });
+
+        res.redirect('/events/administration');
+    } catch (error) {
+        console.error('Error al eliminar el evento:', error);
+        req.flash('error_msg', 'Error al eliminar el evento.');
+        res.redirect('/events/administration');
+    }
 };
 
 // Funciones para participantes
-
 eventsCtrl.renderAdminParticipant = async (req, res) => {
     const participants = await Participant.find().lean();
     res.render('events/administration/admin-participant', {
@@ -90,7 +132,8 @@ eventsCtrl.renderAdminParticipant = async (req, res) => {
 };
 
 eventsCtrl.AddParticipant = async (req, res) => {
-    // Utiliza el middleware 'upload' para procesar la imagen
+    //Añadir participante a la base de datos
+    //Utiliza el middleware 'upload' para procesar la imagen
     upload.single('image')(req, res, async (err) => {
         if (err) {
             console.error('Error al subir la imagen:', err.message);
@@ -100,8 +143,8 @@ eventsCtrl.AddParticipant = async (req, res) => {
         }
 
         try {
-            const { name, votes, imageUrl } = req.body;
-            const newParticipant = new Participant({ name, votes, imageUrl });
+            const { name, imageUrl } = req.body;
+            const newParticipant = new Participant({ name, imageUrl });
             await newParticipant.save();
             console.log(newParticipant);
             req.flash('success_msg', 'Participante añadido correctamente');
@@ -115,77 +158,51 @@ eventsCtrl.AddParticipant = async (req, res) => {
 };
 
 eventsCtrl.deleteParticipant = async (req, res) => {
-    await Participant.findByIdAndDelete(req.params.id);
-    res.redirect('/events/admin-participant');
-};
-
-// Vista de evento
-eventsCtrl.renderEventid = async (req, res) => {
     try {
-        const eventId = req.params.id;
-        const event = await Event.findById(eventId).populate('participants').lean();
+        const participantId = req.params.id;
+        await Participant.findByIdAndDelete(participantId);
 
-        if (!event) {
-            return res.status(404).send('Evento no encontrado');
-        }
+        //Eliminar referencias en Eventparticipant asociadas al participante eliminado
+        await Eventparticipant.deleteMany({ id_participant: participantId });
 
-        const participants = event.participants;
-        const participantsChunks = [];
-
-        const chunkSize = 3; // Cambia según la cantidad de participantes que desees en cada carrusel
-
-        for (let i = 0; i < participants.length; i += chunkSize) {
-            participantsChunks.push(participants.slice(i, i + chunkSize));
-        }
-
-        res.render('events/event', { event, style: 'signin.css', participantsChunks });
+        res.redirect('/events/admin-participant');
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al obtener los detalles del evento');
+        console.error('Error al eliminar el participante:', error);
+        req.flash('error_msg', 'Error al eliminar el participante.');
+        res.redirect('/events/admin-participant');
     }
-
 };
 
-//Funcion para los votos
 eventsCtrl.addVotetoParticipant = async (req, res) => {
     try {
         const { participantId, eventId } = req.body;
-
-        console.log(eventId);
-        console.log(participantId);
 
         if (!participantId || !eventId) {
             return res.status(400).json({ error: 'IDs de participante o evento inválidos' });
         }
 
-        const participant = await Participant.findById(participantId);
-        const event = await Event.findById(eventId);
+        const eventParticipant = await Eventparticipant.findOneAndUpdate(
+            {
+                id_event: eventId,
+                id_participant: participantId
+            },
+            { $inc: { votes: 1 } }, // Incrementar el campo 'votes' en 1 s
+            { new: true } // Devolver el documento actualizado
+        );
 
-        if (!participant || !event) {
+        if (!eventParticipant) {
             return res.status(404).json({ error: 'Participante o evento no encontrado' });
         }
 
-        if (!event.isActive) {
-            return res.status(403).json({ error: 'El evento ha finalizado. No se pueden agregar más votos.' });
-        }
+        // Aquí podrías agregar validaciones adicionales si fuera necesario
+        // Por ejemplo, comprobar si el evento está activo, etc.
 
-    
-        const isParticipantAssociated = participant.votesForEvents.some(vote => vote.eventId.equals(eventId));
-        if (!isParticipantAssociated) {
-            return res.status(403).json({ error: 'El participante no está asociado a este evento.' });
-        }
-
-       
-        const voteIndex = participant.votesForEvents.findIndex(vote => vote.eventId.equals(eventId));
-        participant.votesForEvents[voteIndex].votes += 1;
-        await participant.save();
         req.flash('success_msg', 'Has enviado tus votos correctamente!');
-        res.redirect('/');
-
+        res.redirect(`/eventos/${eventId}`); 
 
     } catch (error) {
         req.flash('error_msg', 'Error al ejecutar el voto.');
-        res.redirect('/events/administration');
+        res.redirect('/eventos/${eventId}');
     }
 };
 
