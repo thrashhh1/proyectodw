@@ -23,6 +23,8 @@ const upload = multer({
 
 
 
+
+
 // Funciones para eventos
 eventsCtrl.renderEventsForm = async (req, res) => {
     const participants = await Participant.find().lean();
@@ -35,7 +37,7 @@ eventsCtrl.renderEventsForm = async (req, res) => {
 
 eventsCtrl.createNewEvent = async (req, res) => {
     //Crear evento nuevo
-    const { title, date, datef, participants } = req.body;
+    const { title, date, datef, participants }  = req.body;
     try {
         const newEvent = await Event.create({ title, date, datef });
         const eventId = newEvent._id;
@@ -65,6 +67,7 @@ eventsCtrl.renderEvents = async (req, res) => {
     const events = await Event.find().lean();
     const style = 'all-events.css';
     res.render('events/all-events', { events, style });
+    console.log(events);
 };
 
 eventsCtrl.renderAdminevents = async (req, res) => {
@@ -82,23 +85,31 @@ eventsCtrl.renderEventid = async (req, res) => {
         const eventId = req.params.id;
 
         const eventParticipants = await Eventparticipant.find({ id_event: eventId }).lean();
-        console.log(eventParticipants);
 
-        //Obtiene los IDs de los participantes para el evento específico
         const participantIds = eventParticipants.map(participant => participant.id_participant);
-        console.log(participantIds);
 
-        //Busca los detalles de los participantes basados en los IDs obtenidos
         const participants = await Participant.find({ _id: { $in: participantIds } }).lean();
 
-        //Obtén los detalles del evento
+        const indexedParticipants = participants.map((participant, index) => ({
+            ...participant,
+            index: index + 1 // Incrementar el índice en 1 para comenzar desde 1
+        }));
+
+        const sortedParticipants = indexedParticipants.sort((a, b) => b.votes - a.votes);
+        console.log(sortedParticipants)
+
         const event = await Event.findById(eventId).lean();
 
         if (!event) {
             return res.status(404).send('Evento no encontrado');
         }
 
-        res.render('events/event', { event, participants, style: 'signin.css' });
+        res.render('events/event', {
+            event,
+            participants: sortedParticipants,
+            eventParticipants,
+            style: 'signin.css'
+        });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al obtener los detalles del evento');

@@ -18,8 +18,6 @@ const {
 } = require("../controllers/events.controller");
 
 const { isAuthenticated } = require("../helpers/auth");
-const Participant = require("../models/Participant");
-
 
 // Ver evento
 router.get("/eventos/:id/", renderEventid);

@@ -1,4 +1,9 @@
+<!--event.html-->
 {{#if event.isActive}}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    Los resultados se podran visualizar cuando un administrador finalice el evento!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 <div class="container">
     <div class="row" style="padding-top: 20px;">
         <div class="col"></div>
@@ -17,27 +22,27 @@
                     </div>
                     <div class="carousel-inner">
                         {{#each participants}}
-                            <div class="carousel-item {{#if @first}}active{{/if}}">
-                                <div class="card" style="width: 30rem; background-color: black;">
-                                    <img src="{{this.imageUrl}}" class="card-img-top" alt="..."
-                                        style="height: 300px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-center" style="color: white;">{{this.name}}</h5>
-                                        <form id="addVotetoParticipant{{this._id}}"
-                                            action="/events/participant/addVote/{{this._id}}" method="POST">
-                                            <input type="hidden" name="participantId" value="{{this._id}}">
-                                            <input type="hidden" name="eventId" value="{{../event._id}}">
-                                            <div class="d-grid">
-                                                <button type="submit" class="btn btn-primary">VOTAR</button>
-                                            </div>
-                                        </form>
-                                        <div>
-                                            <h5 style="padding-top: 20px;"></h5>
+                        <div class="carousel-item {{#if @first}}active{{/if}}">
+                            <div class="card" style="width: 30rem; background-color: black;">
+                                <img src="{{this.imageUrl}}" class="card-img-top" alt="..."
+                                    style="height: 300px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center" style="color: white;">{{this.name}}</h5>
+                                    <form id="addVotetoParticipant{{this._id}}"
+                                        action="/events/participant/addVote/{{this._id}}" method="POST">
+                                        <input type="hidden" name="participantId" value="{{this._id}}">
+                                        <input type="hidden" name="eventId" value="{{../event._id}}">
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary">VOTAR</button>
                                         </div>
-                
+                                    </form>
+                                    <div>
+                                        <h5 style="padding-top: 20px;"></h5>
                                     </div>
+
                                 </div>
                             </div>
+                        </div>
                         {{/each}}
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
@@ -57,17 +62,45 @@
     </div>
 </div>
 {{else}}
-<div class="alert alert-primary  alert-dismissible fade show" role="alert">
-    El evento ha finalizado. ¡El ganador se verá dentro de poco!
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="container">
+    <h2 class="text-center" style="color: white;">Resultados del evento "{{event.title}}"</h2>
+    <div class="row justify-content-center" style="padding-top: 20px;">
+        <div class="col px-0">
+            <table class="table table-striped table-dark mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Participantes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each participants}}
+                    <tr>
+                        <td>{{index}}</td>
+                        <td style="color: white;">{{name}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="col px-0">
+            <table class="table table-striped table-dark" style="padding-right: 100px;">
+                <thead>
+                    <tr>
+                        <th scope="col">Cantidad de votos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each eventParticipants}}
+                    <tr>
+                        <td style="color: white;">{{votes}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {{/if}}
 
-<script>
-    $('form[id^="addVotetoParticipant_"]').on('submit', function (event) {
-        event.preventDefault();
-        const eventId = window.location.pathname.split('/').pop();
-        $(this).append(`<input type="hidden" name="eventId" value="${eventId}">`);
-        $(this).submit();
-    });
-</script>
+

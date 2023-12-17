@@ -7,7 +7,7 @@ const { renderSignUpForm,
     signin,
     logout,
     renderAdminindex
-} = require('../controllers/admin.controller');
+} = require('../controllers/auth.controller');
 
 const { isAuthenticated } = require('../helpers/auth');
 

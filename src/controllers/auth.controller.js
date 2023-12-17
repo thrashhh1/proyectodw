@@ -1,15 +1,15 @@
-const adminCtrl = {};
-const Admin = require("../models/Admin");
+const userCtrl = {};
+const User = require("../models/User");
 const passport = require('passport');
 
-adminCtrl.renderSignUpForm = (req, res) => {
+userCtrl.renderSignUpForm = (req, res) => {
     res.render("users/admin/signup", {
         title: 'Inicia sesión',
         style: 'signup.css' 
     });
 };
 
-adminCtrl.signup = async (req, res) => {
+userCtrl.signup = async (req, res) => {
     const errors = [];
     const { name, email, password } = req.body;
 
@@ -26,17 +26,16 @@ adminCtrl.signup = async (req, res) => {
         });
     } else {
         try {
-            const emailAdmin = await Admin.findOne({ email: email });
+            const Useremail = await User.findOne({ email: email });
 
-            if (emailAdmin) {
+            if (Useremail) {
                 req.flash("error_msg", "El correo ya está en uso");
                 res.redirect("/usuarios/crear");
             } else {
-                const newAdmin = new Admin({ name, email, password });
-                newAdmin.password = await newAdmin.encryptPassword(password);
-                await newAdmin.save();
-                req.flash("success_msg", "Registrado correctamente");
-                res.redirect("/usuarios/ingresar");
+                const newUser = new User({ name, email, password });
+                newUser.password = await newUser.encryptPassword(password);
+                await newUser.save();
+                res.json({message: 'TRUE'});
             }
         } catch (error) {
             console.error(error);
@@ -45,25 +44,25 @@ adminCtrl.signup = async (req, res) => {
     }
 };
 
-adminCtrl.renderAdminindex = (req, res) => {
+userCtrl.renderAdminindex = (req, res) => {
     res.render("users/admin/adminindex",{
         style: 'adminindex.css'
     });
 };
 
-adminCtrl.renderSigninForm = (req, res) => {
+userCtrl.renderSigninForm = (req, res) => {
     res.render("users/admin/signin",{
         style: 'signin.css'
     });
 };
 
-adminCtrl.signin = passport.authenticate('local', {
+userCtrl.signin = passport.authenticate('local', {
     failureRedirect: '/usuarios/ingresar',
     successRedirect: '/users/admin/adminindex',
     failureFlash: true
 });
 
-adminCtrl.logout = (req, res) => {
+userCtrl.logout = (req, res) => {
     req.logout((err) => {
         if (err) {
             console.error(err);
@@ -75,4 +74,5 @@ adminCtrl.logout = (req, res) => {
     });
 };
 
-module.exports = adminCtrl;
+
+module.exports = userCtrl;

@@ -1,8 +1,9 @@
+//server.js
 const express = require('express');
 const exphbs = require('express-handlebars');
 const hbs = require('handlebars');
 const path = require('path');
-const morgan = require('morgan'); 
+const morgan = require('morgan');
 const methodOverride = require('method-override');
 const flash = require('connect-flash');
 const session = require('express-session');
@@ -34,6 +35,7 @@ hbs.registerHelper('isActive', function (isActive) {
 });
 
 // Middlewares
+app.use(express.json());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
@@ -46,6 +48,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+
 // Global Variables
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
@@ -57,7 +60,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(require('./routes/index.routes'));
-app.use(require('./routes/admin.routes'));
+app.use(require('./routes/auth.routes'));
 app.use(require('./routes/events.routes'));
 
 // Static files
